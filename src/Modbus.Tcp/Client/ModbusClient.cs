@@ -1337,10 +1337,22 @@ namespace AMWD.Modbus.Tcp.Client
 				{
 					foreach (var queuedItem in awaitingResponses)
 					{
-						queuedItem.Registration.Dispose();
-						queuedItem.CancellationTokenSource.Dispose();
-						queuedItem.TaskCompletionSource.TrySetCanceled();
-						queuedItem.TimeoutCancellationTokenSource.Dispose();
+						if (queuedItem.Registration != null)
+						{
+							queuedItem.Registration.Dispose();
+						}
+						if (queuedItem.CancellationTokenSource != null)
+						{
+							queuedItem.CancellationTokenSource.Dispose();
+						}
+						if (queuedItem.TaskCompletionSource != null)
+						{
+							queuedItem.TaskCompletionSource.TrySetCanceled();
+						}
+						if (queuedItem.TimeoutCancellationTokenSource != null)
+						{
+							queuedItem.TimeoutCancellationTokenSource.Dispose();
+						}
 					}
 					awaitingResponses.Clear();
 				}
