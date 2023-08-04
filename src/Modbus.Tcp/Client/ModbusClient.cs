@@ -1285,9 +1285,18 @@ namespace AMWD.Modbus.Tcp.Client
 									if (!DisableTransactionId)
 										logger?.LogDebug($"Received response for transaction #{response.TransactionId}.");
 
-									queueItem.CancellationTokenSource.Dispose();
-									queueItem.TaskCompletionSource.TrySetResult(response);
-									queueItem.TimeoutCancellationTokenSource.Dispose();
+									if(queueItem.CancellationTokenSource != null)
+									{
+										queueItem.CancellationTokenSource.Dispose();
+									}
+									if (queueItem.TaskCompletionSource != null)
+									{
+										queueItem.TaskCompletionSource.TrySetResult(response);
+									}
+									if (queueItem.TimeoutCancellationTokenSource != null)
+									{
+										queueItem.TimeoutCancellationTokenSource.Dispose();
+									}
 								}
 							}
 							catch (ArgumentException ex)
